@@ -1,7 +1,7 @@
 # Flutter Mobile App - Production Build
 # Multi-stage build for optimized image size
 
-FROM ghcr.io/nicko170/flutter:latest AS builder
+FROM flutter:3.24.0 AS builder
 
 WORKDIR /app
 
@@ -14,7 +14,8 @@ COPY lib/ ./lib/
 COPY assets/ ./assets/
 COPY web/ ./web/
 
-# Build for web (PWA)
+# Build for web (PWA) with HTML renderer
+ENV FLUTTER_WEB_RENDERER=html
 RUN flutter build web --release
 
 # Nginx stage for serving the PWA
