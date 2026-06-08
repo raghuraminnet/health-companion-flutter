@@ -1,25 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'services/api_service.dart';
-import 'utils/theme.dart';
 import 'screens/auth_screen.dart';
 import 'screens/dashboard_screen.dart';
+import 'utils/theme.dart';
 
 void main() {
   runApp(const HealthCompanionApp());
 }
 
-class HealthCompanionApp extends StatefulWidget {
+class HealthCompanionApp extends StatelessWidget {
   const HealthCompanionApp({super.key});
 
   @override
-  State<HealthCompanionApp> createState() => _HealthCompanionAppState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Health Companion',
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      themeMode: ThemeMode.dark,
+      home: const AuthCheck(),
+    );
+  }
 }
 
-class _HealthCompanionAppState extends State<HealthCompanionApp> {
-  String? _token;
-  String _theme = 'dark';
+class AuthCheck extends StatefulWidget {
+  const AuthCheck({super.key});
+
+  @override
+  State<AuthCheck> createState() => _AuthCheckState();
+}
+
+class _AuthCheckState extends State<AuthCheck> {
   bool _isLoading = true;
+  bool _isLoggedIn = false;
 
   @override
   void initState() {
@@ -28,41 +43,74 @@ class _HealthCompanionAppState extends State<HealthCompanionApp> {
   }
 
   Future<void> _checkAuth() async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('auth_token');
-    
-    if (token != null) {
-      ApiService().setToken(token);
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('auth_token');
+      
+      if (token != null) {
+        // Verify token is still valid
+        try {
+          final api = ApiService();
+          api.setToken(token);
+          await api.getMe();
+          _isLoggedIn = true;
+        } catch (e) {
+          // Token invalid, clear it
+          await prefs.remove('auth_token');
+          _isLoggedIn = false;
+        }
+      }
+    } catch (e) {
+      _isLoggedIn = false;
     }
     
-    setState(() {
-      _token = token;
-      _isLoading = false;
-    });
-  }
-
-  void _onAuthSuccess() {
-    setState(() => _token = 'authenticated');
-  }
-
-  void _onLogout() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('auth_token');
-    ApiService().clearToken();
-    setState(() => _token = null);
+    setState(() => _isLoading = false);
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Health Companion',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.getTheme(_theme),
-      home: _isLoading
-          ? const Scaffold(body: Center(child: CircularProgressIndicator()))
-          : _token == null
-              ? AuthScreen(onAuthSuccess: _onAuthSuccess)
-              : DashboardScreen(onLogout: _onLogout),
-    );
+    if (_isLoading) {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.favorite,
+                size: 80,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              const SizedBox(height: 24),
+              const Text(
+                'Health Companion',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 24),
+              const CircularProgressIndicator(),
+            ],
+          ),
+        ),
+      );
+    }
+
+    if (_isLoggedIn) {
+      return DashboardScreen(
+        onLogout: () async {
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.remove('auth_token');
+          ApiService().clearToken();
+          if (mounted) {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (_) => const AuthScreen()),
+            );
+          }
+        },
+      );
+    }
+
+    return const AuthScreen();
   }
 }

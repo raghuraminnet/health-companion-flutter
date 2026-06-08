@@ -38,12 +38,25 @@ class BpEntry {
     );
   }
 
+  // Blood Pressure Classification (ACC/AHA Guidelines)
+  // Uses AND logic - both systolic AND diastolic must meet criteria
   String get status {
     if (systolic < 120 && diastolic < 80) return 'normal';
-    if (systolic < 130 || diastolic < 85) return 'elevated';
-    if (systolic < 140 || diastolic < 90) return 'stage1';
-    if (systolic < 180 || diastolic < 120) return 'stage2';
+    if (systolic >= 120 && systolic < 130 && diastolic < 80) return 'elevated';
+    if ((systolic >= 130 && systolic < 140) || (diastolic >= 80 && diastolic < 90)) return 'stage1';
+    if ((systolic >= 140 && systolic < 180) || (diastolic >= 90 && diastolic < 120)) return 'stage2';
     return 'crisis';
+  }
+
+  String get statusLabel {
+    switch (status) {
+      case 'normal': return 'Normal';
+      case 'elevated': return 'Elevated';
+      case 'stage1': return 'Stage 1 Hypertension';
+      case 'stage2': return 'Stage 2 Hypertension';
+      case 'crisis': return 'Hypertensive Crisis';
+      default: return 'Unknown';
+    }
   }
 }
 
