@@ -12,6 +12,7 @@ RUN flutter pub get
 # Copy source code
 COPY lib/ ./lib/
 COPY assets/ ./assets/
+COPY web/ ./web/
 
 # Build for web (PWA)
 RUN flutter build web --release

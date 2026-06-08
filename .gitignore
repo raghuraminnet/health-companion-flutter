@@ -12,6 +12,39 @@
 .pub-cache/
 .pub/
 build/
+.dart_tool/
+
+# Android
+android/.gradle/
+android/app/build/
+android/app/*.apk
+android/app/*.aab
+android/local.properties
+
+# iOS
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/App.framework
+ios/Flutter/engine.flutter
+
+# Generated files
+*.g.dart
+*.freezed.dart
+
+# Build outputs
+*.jks
+*.p8
+*.p12
+*.pem
+*.mobileprovision
+*.xcarchive
+*.dSYM.zip
+*.dSYM
+
+# Pub
+pubspec.lock
 
 # Environment
 .env

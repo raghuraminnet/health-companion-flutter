@@ -1,0 +1,7 @@
+{
+  "buildCommand": "echo 'Using pre-built Flutter web app'",
+  "outputDirectory": "build/web",
+  "installCommand": "echo 'No dependencies needed'",
+  "framework": null,
+  "regions": ["sin1"]
+}
