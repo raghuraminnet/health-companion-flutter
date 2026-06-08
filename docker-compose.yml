@@ -72,7 +72,7 @@ services:
   flutter-web:
     build:
       context: .
-      dockerfile: Dockerfile.prebuilt
+      dockerfile: Dockerfile
     container_name: health-companion-web
     restart: unless-stopped
     ports:
