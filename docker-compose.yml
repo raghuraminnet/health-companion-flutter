@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  # Flutter Web App (PWA)
+  flutter-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: health-companion-flutter-web
+    restart: unless-stopped
+    ports:
+      - "${FLUTTER_WEB_PORT:-3000}:80"
+    environment:
+      API_URL: ${API_URL:-http://backend:38257}
+    depends_on:
+      - backend
+
+  # Flutter Android Build (for CI/CD)
+  flutter-android-build:
+    build:
+      context: .
+      dockerfile: Dockerfile.android
+    container_name: health-companion-flutter-android
+    volumes:
+      - flutter_apk_output:/app/build/app/outputs/flutter-apk
+
+volumes:
+  flutter_apk_output:

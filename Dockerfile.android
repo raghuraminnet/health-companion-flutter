@@ -1,0 +1,24 @@
+# Flutter Android Native Build
+FROM ghcr.io/nicko170/flutter:latest
+
+WORKDIR /app
+
+# Install Android SDK dependencies
+RUN apt-get update && apt-get install -y \
+    openjdk-17-jdk \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy pubspec and fetch dependencies
+COPY pubspec.yaml .
+RUN flutter pub get
+
+# Copy source code
+COPY lib/ ./lib/
+COPY assets/ ./assets/
+COPY android/ ./android/
+
+# Build debug APK
+RUN flutter build apk --debug
+
+# Output location
+CMD ["ls", "-la", "/app/build/app/outputs/flutter-apk/"]
