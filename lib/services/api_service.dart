@@ -8,20 +8,31 @@ class ApiService {
   // For local development, use absolute URL with: flutter run -d chrome
   static const String baseUrl = String.fromEnvironment('API_URL', defaultValue: '');
   
+  // Static singleton - token is shared across all instances
+  static String? _staticToken;
+  
   String? _token;
-
+  
+  // Singleton pattern - use ApiService() or ApiService.instance
+  static final ApiService instance = ApiService._internal();
+  factory ApiService() => instance;
+  ApiService._internal();
+  
   void setToken(String token) {
+    _staticToken = token;
     _token = token;
   }
 
   void clearToken() {
+    _staticToken = null;
     _token = null;
   }
 
   Map<String, String> get _headers {
     final headers = {'Content-Type': 'application/json'};
-    if (_token != null) {
-      headers['x-auth-token'] = _token!;
+    final token = _token ?? _staticToken;
+    if (token != null) {
+      headers['x-auth-token'] = token;
     }
     return headers;
   }
