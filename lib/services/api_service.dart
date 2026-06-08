@@ -4,7 +4,9 @@ import '../models/user.dart';
 import '../models/bp_entry.dart';
 
 class ApiService {
-  static const String baseUrl = String.fromEnvironment('API_URL', defaultValue: 'http://localhost:38257');
+  // Use relative URLs - nginx reverse proxy handles API routing
+  // For local development, use absolute URL with: flutter run -d chrome
+  static const String baseUrl = String.fromEnvironment('API_URL', defaultValue: '');
   
   String? _token;
 

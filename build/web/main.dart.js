@@ -79705,7 +79705,7 @@ return r},
 zq(a,b,c,d,e){return this.akL(a,b,c,d,e)},
 akL(a,b,c,d,e){var s=0,r=A.I(t.a),q,p=this,o,n,m,l
 var $async$zq=A.J(function(f,g){if(f===1)return A.F(g,r)
-while(true)switch(s){case 0:n=A.bS("http://localhost:38257/api/auth/register")
+while(true)switch(s){case 0:n=A.bS("/api/auth/register")
 m=p.gdw()
 s=3
 return A.E(A.q_(n,B.H.kA(A.ah(["name",c,"email",a,"password",d,"gender",b,"yearOfBirth",e,"mobile",null],t.N,t.X),null),m),$async$zq)
@@ -79722,7 +79722,7 @@ return A.H($async$zq,r)},
 yK(a,b){return this.aiS(a,b)},
 aiS(a,b){var s=0,r=A.I(t.a),q,p=this,o,n,m,l
 var $async$yK=A.J(function(c,d){if(c===1)return A.F(d,r)
-while(true)switch(s){case 0:o=A.bS("http://localhost:38257/api/auth/login")
+while(true)switch(s){case 0:o=A.bS("/api/auth/login")
 n=p.gdw()
 m=t.N
 s=3
@@ -79739,14 +79739,14 @@ return A.H($async$yK,r)},
 yL(){var s=0,r=A.I(t.H),q=this
 var $async$yL=A.J(function(a,b){if(a===1)return A.F(b,r)
 while(true)switch(s){case 0:s=2
-return A.E(A.q_(A.bS("http://localhost:38257/api/auth/logout"),null,q.gdw()),$async$yL)
+return A.E(A.q_(A.bS("/api/auth/logout"),null,q.gdw()),$async$yL)
 case 2:q.a=null
 return A.G(null,r)}})
 return A.H($async$yL,r)},
 un(){var s=0,r=A.I(t.ui),q,p=this,o,n,m,l,k,j,i,h,g
 var $async$un=A.J(function(a,b){if(a===1)return A.F(b,r)
 while(true)switch(s){case 0:s=3
-return A.E(A.nn(A.bS("http://localhost:38257/api/auth/me"),p.gdw()),$async$un)
+return A.E(A.nn(A.bS("/api/auth/me"),p.gdw()),$async$un)
 case 3:g=b
 if(g.b===200){o=B.H.df(A.d7(A.d5(g.e)).bU(g.w),null)
 n=o.h(0,"id")
@@ -79765,7 +79765,7 @@ return A.H($async$un,r)},
 q1(){var s=0,r=A.I(t.a),q,p=this,o
 var $async$q1=A.J(function(a,b){if(a===1)return A.F(b,r)
 while(true)switch(s){case 0:s=3
-return A.E(A.nn(A.bS("http://localhost:38257/api/preferences"),p.gdw()),$async$q1)
+return A.E(A.nn(A.bS("/api/preferences"),p.gdw()),$async$q1)
 case 3:o=b
 if(o.b===200){q=B.H.df(A.d7(A.d5(o.e)).bU(o.w),null)
 s=1
@@ -79775,7 +79775,7 @@ return A.H($async$q1,r)},
 zI(a){return this.alR(a)},
 alR(a){var s=0,r=A.I(t.a),q,p=this,o,n,m
 var $async$zI=A.J(function(b,c){if(b===1)return A.F(c,r)
-while(true)switch(s){case 0:o=A.bS("http://localhost:38257/api/preferences")
+while(true)switch(s){case 0:o=A.bS("/api/preferences")
 n=p.gdw()
 s=3
 return A.E(A.aMM(o,B.H.kA(a,null),n),$async$zI)
@@ -79788,7 +79788,7 @@ return A.H($async$zI,r)},
 nO(){var s=0,r=A.I(t.a),q,p=this,o
 var $async$nO=A.J(function(a,b){if(a===1)return A.F(b,r)
 while(true)switch(s){case 0:s=3
-return A.E(A.nn(A.bS("http://localhost:38257/api/settings"),p.gdw()),$async$nO)
+return A.E(A.nn(A.bS("/api/settings"),p.gdw()),$async$nO)
 case 3:o=b
 if(o.b===200){q=B.H.df(A.d7(A.d5(o.e)).bU(o.w),null)
 s=1
@@ -79798,7 +79798,7 @@ return A.H($async$nO,r)},
 ul(){var s=0,r=A.I(t.T4),q,p=this,o,n
 var $async$ul=A.J(function(a,b){if(a===1)return A.F(b,r)
 while(true)switch(s){case 0:s=3
-return A.E(A.nn(A.bS("http://localhost:38257/api/bp?limit=100&offset=0"),p.gdw()),$async$ul)
+return A.E(A.nn(A.bS("/api/bp?limit=100&offset=0"),p.gdw()),$async$ul)
 case 3:n=b
 if(n.b===200){o=J.iB(B.H.df(A.d7(A.d5(n.e)).bU(n.w),null),new A.VN(),t.LM)
 q=A.Z(o,!0,o.$ti.i("an.E"))
@@ -79809,7 +79809,7 @@ return A.H($async$ul,r)},
 wR(a,b,c,d,e){return this.ad5(a,b,c,d,e)},
 ad5(a,b,c,d,e){var s=0,r=A.I(t.LM),q,p=this,o,n,m,l
 var $async$wR=A.J(function(f,g){if(f===1)return A.F(g,r)
-while(true)switch(s){case 0:n=A.bS("http://localhost:38257/api/bp")
+while(true)switch(s){case 0:n=A.bS("/api/bp")
 m=p.gdw()
 s=3
 return A.E(A.q_(n,B.H.kA(A.ah(["systolic",e,"diastolic",a,"pulse",c,"session",d,"context",null,"notes",b,"medicationTaken",!1],t.N,t.X),null),m),$async$wR)
@@ -79827,14 +79827,14 @@ xH(a){return this.afr(a)},
 afr(a){var s=0,r=A.I(t.H),q=this
 var $async$xH=A.J(function(b,c){if(b===1)return A.F(c,r)
 while(true)switch(s){case 0:s=2
-return A.E(A.Fn(A.bS("http://localhost:38257/api/bp/"+a),q.gdw()),$async$xH)
+return A.E(A.Fn(A.bS("/api/bp/"+a),q.gdw()),$async$xH)
 case 2:if(c.b!==200)throw A.f(A.bA("Failed to delete BP entry"))
 return A.G(null,r)}})
 return A.H($async$xH,r)},
 uo(){var s=0,r=A.I(t.Gu),q,p=this,o,n
 var $async$uo=A.J(function(a,b){if(a===1)return A.F(b,r)
 while(true)switch(s){case 0:s=3
-return A.E(A.nn(A.bS("http://localhost:38257/api/mood?limit=100&offset=0"),p.gdw()),$async$uo)
+return A.E(A.nn(A.bS("/api/mood?limit=100&offset=0"),p.gdw()),$async$uo)
 case 3:n=b
 if(n.b===200){o=J.iB(B.H.df(A.d7(A.d5(n.e)).bU(n.w),null),new A.VO(),t.sH)
 q=A.Z(o,!0,o.$ti.i("an.E"))
@@ -79845,7 +79845,7 @@ return A.H($async$uo,r)},
 wV(a,b,c,d,e){return this.ade(a,b,c,d,e)},
 ade(a,b,c,d,e){var s=0,r=A.I(t.sH),q,p=this,o,n,m,l
 var $async$wV=A.J(function(f,g){if(f===1)return A.F(g,r)
-while(true)switch(s){case 0:n=A.bS("http://localhost:38257/api/mood")
+while(true)switch(s){case 0:n=A.bS("/api/mood")
 m=p.gdw()
 s=3
 return A.E(A.q_(n,B.H.kA(A.ah(["mood",c,"dayRating",a,"sleepQuality",e,"energyLevel",b,"notes",d],t.N,t.X),null),m),$async$wV)
@@ -79863,14 +79863,14 @@ xI(a){return this.aft(a)},
 aft(a){var s=0,r=A.I(t.H),q=this
 var $async$xI=A.J(function(b,c){if(b===1)return A.F(c,r)
 while(true)switch(s){case 0:s=2
-return A.E(A.Fn(A.bS("http://localhost:38257/api/mood/"+a),q.gdw()),$async$xI)
+return A.E(A.Fn(A.bS("/api/mood/"+a),q.gdw()),$async$xI)
 case 2:if(c.b!==200)throw A.f(A.bA("Failed to delete mood entry"))
 return A.G(null,r)}})
 return A.H($async$xI,r)},
 uv(){var s=0,r=A.I(t.OY),q,p=this,o,n
 var $async$uv=A.J(function(a,b){if(a===1)return A.F(b,r)
 while(true)switch(s){case 0:s=3
-return A.E(A.nn(A.bS("http://localhost:38257/api/water?limit=100&offset=0"),p.gdw()),$async$uv)
+return A.E(A.nn(A.bS("/api/water?limit=100&offset=0"),p.gdw()),$async$uv)
 case 3:n=b
 if(n.b===200){o=J.iB(B.H.df(A.d7(A.d5(n.e)).bU(n.w),null),new A.VQ(),t.dx)
 q=A.Z(o,!0,o.$ti.i("an.E"))
@@ -79881,7 +79881,7 @@ return A.H($async$uv,r)},
 x_(a){return this.adl(a)},
 adl(a){var s=0,r=A.I(t.dx),q,p=this,o,n,m,l
 var $async$x_=A.J(function(b,c){if(b===1)return A.F(c,r)
-while(true)switch(s){case 0:n=A.bS("http://localhost:38257/api/water")
+while(true)switch(s){case 0:n=A.bS("/api/water")
 m=p.gdw()
 s=3
 return A.E(A.q_(n,B.H.kA(A.ah(["amount",a,"unit","ml"],t.N,t.K),null),m),$async$x_)
@@ -79899,14 +79899,14 @@ xK(a){return this.afv(a)},
 afv(a){var s=0,r=A.I(t.H),q=this
 var $async$xK=A.J(function(b,c){if(b===1)return A.F(c,r)
 while(true)switch(s){case 0:s=2
-return A.E(A.Fn(A.bS("http://localhost:38257/api/water/"+a),q.gdw()),$async$xK)
+return A.E(A.Fn(A.bS("/api/water/"+a),q.gdw()),$async$xK)
 case 2:if(c.b!==200)throw A.f(A.bA("Failed to delete water entry"))
 return A.G(null,r)}})
 return A.H($async$xK,r)},
 us(){var s=0,r=A.I(t.sQ),q,p=this,o,n
 var $async$us=A.J(function(a,b){if(a===1)return A.F(b,r)
 while(true)switch(s){case 0:s=3
-return A.E(A.nn(A.bS("http://localhost:38257/api/steps?limit=100&offset=0"),p.gdw()),$async$us)
+return A.E(A.nn(A.bS("/api/steps?limit=100&offset=0"),p.gdw()),$async$us)
 case 3:n=b
 if(n.b===200){o=J.iB(B.H.df(A.d7(A.d5(n.e)).bU(n.w),null),new A.VP(),t.J6)
 q=A.Z(o,!0,o.$ti.i("an.E"))
@@ -79917,7 +79917,7 @@ return A.H($async$us,r)},
 wX(a){return this.adj(a)},
 adj(a){var s=0,r=A.I(t.J6),q,p=this,o,n,m,l
 var $async$wX=A.J(function(b,c){if(b===1)return A.F(c,r)
-while(true)switch(s){case 0:n=A.bS("http://localhost:38257/api/steps")
+while(true)switch(s){case 0:n=A.bS("/api/steps")
 m=p.gdw()
 s=3
 return A.E(A.q_(n,B.H.kA(A.ah(["steps",a],t.N,t.S),null),m),$async$wX)
@@ -79935,14 +79935,14 @@ xJ(a){return this.afu(a)},
 afu(a){var s=0,r=A.I(t.H),q=this
 var $async$xJ=A.J(function(b,c){if(b===1)return A.F(c,r)
 while(true)switch(s){case 0:s=2
-return A.E(A.Fn(A.bS("http://localhost:38257/api/steps/"+a),q.gdw()),$async$xJ)
+return A.E(A.Fn(A.bS("/api/steps/"+a),q.gdw()),$async$xJ)
 case 2:if(c.b!==200)throw A.f(A.bA("Failed to delete steps entry"))
 return A.G(null,r)}})
 return A.H($async$xJ,r)},
 uw(){var s=0,r=A.I(t.wJ),q,p=this,o,n
 var $async$uw=A.J(function(a,b){if(a===1)return A.F(b,r)
 while(true)switch(s){case 0:s=3
-return A.E(A.nn(A.bS("http://localhost:38257/api/weight?limit=100&offset=0"),p.gdw()),$async$uw)
+return A.E(A.nn(A.bS("/api/weight?limit=100&offset=0"),p.gdw()),$async$uw)
 case 3:n=b
 if(n.b===200){o=J.iB(B.H.df(A.d7(A.d5(n.e)).bU(n.w),null),new A.VR(),t.Ca)
 q=A.Z(o,!0,o.$ti.i("an.E"))
@@ -79953,7 +79953,7 @@ return A.H($async$uw,r)},
 x0(a,b){return this.adm(a,b)},
 adm(a,b){var s=0,r=A.I(t.Ca),q,p=this,o,n,m,l
 var $async$x0=A.J(function(c,d){if(c===1)return A.F(d,r)
-while(true)switch(s){case 0:n=A.bS("http://localhost:38257/api/weight")
+while(true)switch(s){case 0:n=A.bS("/api/weight")
 m=p.gdw()
 s=3
 return A.E(A.q_(n,B.H.kA(A.ah(["weight",b,"notes",a],t.N,t.X),null),m),$async$x0)
@@ -79971,14 +79971,14 @@ xL(a){return this.afw(a)},
 afw(a){var s=0,r=A.I(t.H),q=this
 var $async$xL=A.J(function(b,c){if(b===1)return A.F(c,r)
 while(true)switch(s){case 0:s=2
-return A.E(A.Fn(A.bS("http://localhost:38257/api/weight/"+a),q.gdw()),$async$xL)
+return A.E(A.Fn(A.bS("/api/weight/"+a),q.gdw()),$async$xL)
 case 2:if(c.b!==200)throw A.f(A.bA("Failed to delete weight entry"))
 return A.G(null,r)}})
 return A.H($async$xL,r)},
 ur(){var s=0,r=A.I(t.a),q,p=this,o
 var $async$ur=A.J(function(a,b){if(a===1)return A.F(b,r)
 while(true)switch(s){case 0:s=3
-return A.E(A.nn(A.bS("http://localhost:38257/api/stats?days=7"),p.gdw()),$async$ur)
+return A.E(A.nn(A.bS("/api/stats?days=7"),p.gdw()),$async$ur)
 case 3:o=b
 if(o.b===200){q=B.H.df(A.d7(A.d5(o.e)).bU(o.w),null)
 s=1
