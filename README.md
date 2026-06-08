@@ -78,22 +78,66 @@ flutter build ios --debug
 # Requires Xcode
 ```
 
-## Docker Deployment
+## Hostinger Docker Deployment
 
-### Web App (PWA)
+### Option 1: DockerManager (Recommended)
+
+1. **Upload files** to your Hostinger VPS:
+   ```bash
+   scp -r health-companion-flutter user@your-server:/var/www/
+   ```
+
+2. **SSH into your server** and navigate to the app directory:
+   ```bash
+   cd /var/www/health-companion-flutter
+   ```
+
+3. **In Hostinger DockerManager**, select "Compose Manually" and paste the contents of `docker-compose.yml`
+
+4. **Deploy** - The app will be available at `http://YOUR_SERVER_IP:3002`
+
+### Option 2: Manual Docker Commands
 
 ```bash
-# Build and run
-docker-compose up -d
+# SSH into your server
+ssh user@your-server
 
-# Access at http://localhost:3000
+# Navigate to app directory
+cd /var/www/health-companion-flutter
+
+# Build and start
+docker build -t health-companion-flutter .
+docker run -d --name health-companion-flutter -p 3002:80 --restart unless-stopped health-companion-flutter
 ```
 
-### Build Android APK in Docker
+### Option 3: Using the deploy script
 
 ```bash
-docker-compose run flutter-android-build
-# APK will be at ./flutter_apk_output/
+chmod +x deploy-hostinger.sh
+./deploy-hostinger.sh
+```
+
+### Accessing the App
+
+After deployment, access the Flutter PWA at:
+```
+http://YOUR_SERVER_IP:3002
+```
+
+To bind to port 80 (standard HTTP):
+```bash
+docker run -d --name health-companion-flutter -p 80:80 --restart unless-stopped health-companion-flutter
+```
+
+## Docker Configuration
+
+The `docker-compose.yml` exposes port **3002** by default. Edit to change:
+
+```yaml
+ports:
+  - "80:80"    # Standard HTTP
+  # or
+  - "8080:80"  # Custom port
 ```
 
 ## Configuration

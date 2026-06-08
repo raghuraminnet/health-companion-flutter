@@ -1,28 +1,30 @@
+# Flutter Health Companion - Hostinger Docker Deployment
+# Use with Hostinger DockerManager "Compose Manually" feature
+
 version: '3.8'
 
 services:
-  # Flutter Web App (PWA)
+  # Flutter Web App - Nginx serving PWA
   flutter-web:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: health-companion-flutter-web
+    container_name: health-companion-flutter
     restart: unless-stopped
     ports:
-      - "${FLUTTER_WEB_PORT:-3000}:80"
+      - "3002:80"
     environment:
-      API_URL: ${API_URL:-http://backend:38257}
-    depends_on:
-      - backend
-
-  # Flutter Android Build (for CI/CD)
-  flutter-android-build:
-    build:
-      context: .
-      dockerfile: Dockerfile.android
-    container_name: health-companion-flutter-android
+      - TZ=Asia/Kuala_Lumpur
     volumes:
-      - flutter_apk_output:/app/build/app/outputs/flutter-apk
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - health-network
+ healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
-volumes:
-  flutter_apk_output:
+networks:
+  health-network:
+    driver: bridge
