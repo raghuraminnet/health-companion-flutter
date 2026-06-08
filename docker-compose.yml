@@ -52,7 +52,7 @@ services:
       - PG_USER=healthuser
       - PG_PASSWORD=healthpass123
       - PG_DATABASE=healthapp
-      - JWT_SECRET=health-companion-jwt-secret-key-2024
+      - JWT_SECRET=healthcompanion2024secret
       - CORS_ORIGIN=*
     depends_on:
       postgres:
@@ -72,7 +72,7 @@ services:
   flutter-web:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prebuilt
     container_name: health-companion-web
     restart: unless-stopped
     ports:
