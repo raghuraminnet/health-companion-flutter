@@ -1,15 +1,79 @@
-# Flutter Health Companion - Hostinger Docker Deployment
-# Use with Hostinger DockerManager "Compose Manually" feature
+# Health Companion - Full Stack Deployment
+# Single docker-compose to spin up everything: Postgres + API + Flutter Web
+#
+# Usage:
+#   1. Clone the repo: git clone https://github.com/raghuraminnet/health-companion-flutter.git
+#   2. cd health-companion-flutter
+#   3. docker-compose up -d --build
+#   4. Access app at http://YOUR_SERVER_IP:3002
 
 version: '3.8'
 
 services:
-  # Flutter Web App - Nginx serving PWA
+  # ============================================
+  # PostgreSQL Database
+  # ============================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: health-companion-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: healthapp
+      POSTGRES_USER: healthuser
+      POSTGRES_PASSWORD: healthpass123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - health-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U healthuser -d healthapp"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ============================================
+  # Backend API Server
+  # ============================================
+  api:
+    build:
+      context: ../bp-tracker
+      dockerfile: Dockerfile
+    container_name: health-companion-api
+    restart: unless-stopped
+    ports:
+      - "38257:38257"
+    environment:
+      - NODE_ENV=production
+      - PORT=38257
+      - PG_HOST=postgres
+      - PG_PORT=5432
+      - PG_USER=healthuser
+      - PG_PASSWORD=healthpass123
+      - PG_DATABASE=healthapp
+      - JWT_SECRET=health-companion-jwt-secret-key-2024
+      - CORS_ORIGIN=*
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - health-network
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:38257/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # ============================================
+  # Flutter Web App (Nginx)
+  # ============================================
   flutter-web:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: health-companion-flutter
+    container_name: health-companion-web
     restart: unless-stopped
     ports:
       - "3002:80"
@@ -17,6 +81,8 @@ services:
       - TZ=Asia/Kuala_Lumpur
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - api
     networks:
       - health-network
  healthcheck:
@@ -28,3 +94,7 @@ services:
 networks:
   health-network:
     driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
