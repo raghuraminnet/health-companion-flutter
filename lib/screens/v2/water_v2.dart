@@ -3,7 +3,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'v2_theme.dart';
 import 'sample_data.dart';
-import 'mood_v2.dart' show _TopBar, _BackBtn, _TuneBtn, _SectionLabel, _PillFab;
 
 class WaterV2 extends StatelessWidget {
   const WaterV2({super.key});
@@ -229,7 +228,7 @@ class _7DayBars extends StatelessWidget {
                     sideTitles: SideTitles(showTitles: false)),
               ),
               borderData: FlBorderData(show: false),
-              barTouchData: const BarTouchData(enabled: false),
+              barTouchData: BarTouchData(enabled: false),
               barGroups: List.generate(data.length, (i) => BarChartGroupData(
                 x: i,
                 barRods: [
@@ -446,6 +445,94 @@ class _ChipBtn extends StatelessWidget {
       side: BorderSide.none,
       labelStyle: GoogleFonts.plusJakartaSans(
         fontWeight: FontWeight.w700, fontSize: 12, color: V2Colors.text),
+    );
+  }
+}
+
+class _TopBar extends StatelessWidget {
+  final String title;
+  const _TopBar({required this.title});
+  @override
+  Widget build(BuildContext context) {
+    return Row(children: [
+      const _BackBtn(),
+      const SizedBox(width: 12),
+      Text(title, style: Theme.of(context).textTheme.headlineMedium),
+      const Spacer(),
+      const _TuneBtn(),
+    ]);
+  }
+}
+
+class _BackBtn extends StatelessWidget {
+  const _BackBtn();
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {},
+      borderRadius: BorderRadius.circular(999),
+      child: Container(
+        width: 44, height: 44,
+        decoration: BoxDecoration(
+          color: V2Colors.surface, shape: BoxShape.circle,
+          border: Border.all(color: V2Colors.border),
+        ),
+        child: const Icon(Icons.arrow_back_rounded, size: 20, color: V2Colors.text),
+      ),
+    );
+  }
+}
+
+class _TuneBtn extends StatelessWidget {
+  const _TuneBtn();
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {},
+      borderRadius: BorderRadius.circular(999),
+      child: Container(
+        width: 44, height: 44,
+        decoration: BoxDecoration(
+          color: V2Colors.surface, shape: BoxShape.circle,
+          border: Border.all(color: V2Colors.border),
+        ),
+        child: const Icon(Icons.tune_rounded, size: 20, color: V2Colors.text),
+      ),
+    );
+  }
+}
+
+class _SectionLabel extends StatelessWidget {
+  final String t;
+  const _SectionLabel(this.t);
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(left: 4),
+    child: Text(t.toUpperCase(), style: Theme.of(context).textTheme.labelSmall),
+  );
+}
+
+class _PillFab extends StatelessWidget {
+  final String label;
+  final Color color;
+  final VoidCallback onTap;
+  const _PillFab({required this.label, required this.color, required this.onTap});
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      height: 54,
+      child: FloatingActionButton.extended(
+        onPressed: onTap,
+        backgroundColor: color,
+        foregroundColor: Colors.white,
+        elevation: 0,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
+        icon: const Icon(Icons.add_rounded),
+        label: Text(label,
+            style: GoogleFonts.plusJakartaSans(
+                fontWeight: FontWeight.w700, fontSize: 14)),
+      ),
     );
   }
 }

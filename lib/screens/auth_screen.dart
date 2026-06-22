@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/api_service.dart';
-import 'dashboard_screen.dart';
+import 'v2/dashboard_v2.dart';
 
 class AuthScreen extends StatefulWidget {
   final VoidCallback? onAuthSuccess;
@@ -75,18 +75,7 @@ class _AuthScreenState extends State<AuthScreen> {
       if (mounted) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (_) => DashboardScreen(
-              onLogout: () async {
-                final prefs = await SharedPreferences.getInstance();
-                await prefs.remove('auth_token');
-                ApiService().clearToken();
-                if (mounted) {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (_) => const AuthScreen()),
-                  );
-                }
-              },
-            ),
+            builder: (_) => const DashboardV2(),
           ),
         );
       }
