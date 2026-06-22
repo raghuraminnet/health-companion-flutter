@@ -185,28 +185,38 @@ class _LatestHero extends StatelessWidget {
           ),
         ]),
         const SizedBox(height: 14),
-        Row(crossAxisAlignment: CrossAxisAlignment.baseline,
-          textBaseline: TextBaseline.alphabetic, children: [
-          Text(latest.toStringAsFixed(1),
-              style: GoogleFonts.plusJakartaSans(
-                fontSize: 64, fontWeight: FontWeight.w800,
-                color: V2Colors.text, height: 1, letterSpacing: -2)),
-          const SizedBox(width: 6),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Text('kg',
-                style: GoogleFonts.plusJakartaSans(
-                  fontSize: 18, fontWeight: FontWeight.w700,
-                  color: V2Colors.textMuted)),
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerLeft,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Text(latest.toStringAsFixed(1),
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 64, fontWeight: FontWeight.w800,
+                    color: V2Colors.text, height: 1, letterSpacing: -2)),
+              const SizedBox(width: 6),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Text('kg',
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 18, fontWeight: FontWeight.w700,
+                      color: V2Colors.textMuted)),
+              ),
+            ],
           ),
-        ]),
+        ),
         const SizedBox(height: 8),
         Row(children: [
           const Icon(Icons.calendar_today_rounded,
               size: 14, color: V2Colors.textMuted),
           const SizedBox(width: 6),
-          Text('Last weighed this morning',
-              style: Theme.of(context).textTheme.bodyMedium),
+          Expanded(
+            child: Text('Last weighed this morning',
+                style: Theme.of(context).textTheme.bodyMedium,
+                overflow: TextOverflow.ellipsis),
+          ),
         ]),
       ]),
     );

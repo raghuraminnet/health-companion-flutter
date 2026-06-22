@@ -181,18 +181,25 @@ class _LatestHero extends StatelessWidget {
             Text('Today',
                 style: Theme.of(context).textTheme.bodyMedium),
             const SizedBox(height: 4),
-            Row(crossAxisAlignment: CrossAxisAlignment.baseline,
-              textBaseline: TextBaseline.alphabetic, children: [
-                const Text('7,560',
-                    style: TextStyle(
-                      fontSize: 44, fontWeight: FontWeight.w800,
-                      color: V2Colors.text, height: 1, letterSpacing: -1.2)),
-                const SizedBox(width: 4),
-                Text('of 10,000',
-                    style: GoogleFonts.plusJakartaSans(
-                      fontSize: 13, fontWeight: FontWeight.w600,
-                      color: V2Colors.textMuted)),
-              ]),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  const Text('7,560',
+                      style: TextStyle(
+                        fontSize: 44, fontWeight: FontWeight.w800,
+                        color: V2Colors.text, height: 1, letterSpacing: -1.2)),
+                  const SizedBox(width: 4),
+                  Text('of 10,000',
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 13, fontWeight: FontWeight.w600,
+                        color: V2Colors.textMuted)),
+                ],
+              ),
+            ),
             const SizedBox(height: 8),
             Row(children: [
               const Icon(Icons.directions_walk_rounded,
