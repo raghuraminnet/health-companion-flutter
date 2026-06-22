@@ -6,7 +6,7 @@ import '../models/bp_entry.dart';
 class ApiService {
   // Use relative URLs - nginx reverse proxy handles API routing
   // For local development, use absolute URL with: flutter run -d chrome
-  static const String baseUrl = String.fromEnvironment('API_URL', defaultValue: '');
+  static const String baseUrl = String.fromEnvironment('API_URL', defaultValue: 'http://10.0.2.2:38257');
   
   // Static singleton - token is shared across all instances
   static String? _staticToken;

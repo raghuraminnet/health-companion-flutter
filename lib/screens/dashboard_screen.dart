@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/api_service.dart';
-import '../models/bp_entry.dart';
-import '../models/pregnancy.dart';
-import 'blood_pressure_screen.dart';
-import 'mood_screen.dart';
-import 'water_screen.dart';
-import 'steps_screen.dart';
-import 'weight_screen.dart';
 import 'pregnancy_screen.dart';
 import 'settings_screen.dart';
-import '../widgets/quick_add_dialog.dart';
 
+/// Legacy home dashboard (v1 surface).
+///
+/// After the v2 design system rollout, the daily trackers (BP, Mood, Water,
+/// Steps, Weight) ship as redesigned screens under `screens/v2/`, and the
+/// default landing screen is `DashboardV2`. This screen remains only so the
+/// existing `AuthScreen` post-login redirect keeps compiling — it shows a
+/// basic home view with greeting card, optional pregnancy banner, and
+/// weekly summary.
 class DashboardScreen extends StatefulWidget {
   final VoidCallback onLogout;
   
@@ -27,7 +27,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Map<String, dynamic>? _preferences;
   bool _isLoading = true;
   bool _isPregnancyEnabled = false;
-  PregnancyProfile? _pregnancyProfile;
 
   @override
   void initState() {
@@ -61,27 +60,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
-  void _showQuickAdd(String trackerType) {
-    showDialog(
-      context: context,
-      builder: (ctx) => QuickAddDialog(trackerType: trackerType),
-    ).then((saved) {
-      if (saved == true) {
-        _loadData();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('✅ Entry added!'), duration: Duration(seconds: 1)),
-        );
-      }
-    });
-  }
-
   int get _enabledTrackerCount {
     int count = 1; // Home tab
-    if (_preferences?['enable_blood_pressure'] == true) count++;
-    if (_preferences?['enable_mood'] == true) count++;
-    if (_preferences?['enable_water'] == true) count++;
-    if (_preferences?['enable_steps'] == true) count++;
-    if (_preferences?['enable_weight'] == true) count++;
     if (_isPregnancyEnabled) count++;
     return count;
   }
@@ -90,21 +70,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     List<NavigationDestination> dests = [
       const NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
     ];
-    if (_preferences?['enable_blood_pressure'] == true) {
-      dests.add(const NavigationDestination(icon: Icon(Icons.favorite), label: 'BP'));
-    }
-    if (_preferences?['enable_mood'] == true) {
-      dests.add(const NavigationDestination(icon: Icon(Icons.emoji_emotions), label: 'Mood'));
-    }
-    if (_preferences?['enable_water'] == true) {
-      dests.add(const NavigationDestination(icon: Icon(Icons.water_drop), label: 'Water'));
-    }
-    if (_preferences?['enable_steps'] == true) {
-      dests.add(const NavigationDestination(icon: Icon(Icons.directions_walk), label: 'Steps'));
-    }
-    if (_preferences?['enable_weight'] == true) {
-      dests.add(const NavigationDestination(icon: Icon(Icons.monitor_weight), label: 'Weight'));
-    }
     if (_isPregnancyEnabled) {
       dests.add(const NavigationDestination(icon: Icon(Icons.pregnant_woman), label: 'Baby'));
     }
@@ -113,11 +78,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   List<Widget> get _screens {
     List<Widget> scrs = [_buildHomeScreen()];
-    if (_preferences?['enable_blood_pressure'] == true) scrs.add(const BloodPressureScreen());
-    if (_preferences?['enable_mood'] == true) scrs.add(const MoodScreen());
-    if (_preferences?['enable_water'] == true) scrs.add(const WaterScreen());
-    if (_preferences?['enable_steps'] == true) scrs.add(const StepsScreen());
-    if (_preferences?['enable_weight'] == true) scrs.add(const WeightScreen());
     if (_isPregnancyEnabled) scrs.add(const PregnancyScreen());
     scrs.add(SettingsScreen(onLogout: widget.onLogout));
     return scrs;
@@ -125,6 +85,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final onSettings = _currentIndex >= _destinations.length;
     return Scaffold(
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -132,11 +93,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
               index: _currentIndex,
               children: _screens,
             ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _currentIndex,
-        onDestinationSelected: (i) => setState(() => _currentIndex = i),
-        destinations: _destinations,
-      ),
+      bottomNavigationBar: onSettings
+          ? null
+          : NavigationBar(
+              selectedIndex: _currentIndex,
+              onDestinationSelected: (i) => setState(() => _currentIndex = i),
+              destinations: _destinations,
+            ),
     );
   }
 
@@ -165,20 +128,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 _buildPregnancyBanner(),
                 const SizedBox(height: 16),
               ],
-              _buildTodayStats(),
-              const SizedBox(height: 16),
-              _buildQuickAddGrid(),
-              const SizedBox(height: 16),
               _buildWeeklyOverview(),
               const SizedBox(height: 16),
               _buildInsightsCard(),
             ],
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showQuickAddMenu(),
-        child: const Icon(Icons.add),
       ),
     );
   }
@@ -286,307 +241,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildTodayStats() {
-    final bpTotal = int.tryParse(_stats?['bp']?['total']?.toString() ?? '0') ?? 0;
-    final avgSystolic = int.tryParse(_stats?['bp']?['avg_systolic']?.toString() ?? '0') ?? 0;
-    final avgDiastolic = int.tryParse(_stats?['bp']?['avg_diastolic']?.toString() ?? '0') ?? 0;
-    final waterTotal = int.tryParse(_stats?['water']?['total']?.toString() ?? '0') ?? 0;
-    final stepsTotal = int.tryParse(_stats?['steps']?['total']?.toString() ?? '0') ?? 0;
-    final waterGoal = (_preferences?['water_goal'] ?? 2500) as int;
-    final stepsGoal = (_preferences?['steps_goal'] ?? 10000) as int;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          '📊 Today\'s Overview',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            Expanded(
-              child: _buildStatCard(
-                '❤️ BP',
-                bpTotal > 0 ? '$avgSystolic/$avgDiastolic' : '--/--',
-                'mmHg',
-                _getBpTrend(bpTotal),
-                bpTotal > 0 ? _getBpColor(avgSystolic, avgDiastolic) : Colors.grey,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _buildStatCard(
-                '💧 Water',
-                '$waterTotal',
-                'ml / ${waterGoal}ml',
-                _buildProgressBar(waterTotal / waterGoal),
-                Colors.blue,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            Expanded(
-              child: _buildStatCard(
-                '👟 Steps',
-                '$stepsTotal',
-                '/ ${stepsGoal}',
-                _buildProgressBar(stepsTotal / stepsGoal),
-                Colors.green,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _buildMoodCard(),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildStatCard(String title, String value, String subtitle, Widget? trend, Color color) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withOpacity(0.3)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text(title, style: TextStyle(color: color, fontWeight: FontWeight.w600)),
-              const Spacer(),
-              if (trend != null) trend,
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: color,
-            ),
-          ),
-          Text(
-            subtitle,
-            style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMoodCard() {
-    final moodTotal = int.tryParse(_stats?['mood']?['total']?.toString() ?? '0') ?? 0;
-    final moodBreakdown = _stats?['mood']?['breakdown'] as Map<String, dynamic>? ?? {};
-    
-    String dominantMood = '😊';
-    if (moodBreakdown.isNotEmpty) {
-      final sorted = moodBreakdown.entries.toList()
-        ..sort((a, b) => (b.value as int).compareTo(a.value as int));
-      if (sorted.isNotEmpty) {
-        switch (sorted.first.key) {
-          case 'happy': dominantMood = '😄';
-          case 'sad': dominantMood = '😢';
-          case 'anxious': dominantMood = '😰';
-          case 'tired': dominantMood = '😴';
-          case 'angry': dominantMood = '😤';
-          case 'neutral': dominantMood = '😐';
-          case 'excited': dominantMood = '🤗';
-          case 'calm': dominantMood = '😌';
-        }
-      }
-    }
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.amber.shade50,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.amber.shade200),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text('😊 Mood', style: TextStyle(color: Colors.amber.shade700, fontWeight: FontWeight.w600)),
-              const Spacer(),
-              Text('$moodTotal entries', style: TextStyle(color: Colors.grey.shade600, fontSize: 12)),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            dominantMood,
-            style: const TextStyle(fontSize: 32),
-          ),
-          Text(
-            moodTotal > 0 ? 'This week' : 'No entries',
-            style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _getBpTrend(int total) {
-    if (total == 0) return const SizedBox();
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(Icons.trending_up, size: 16, color: Colors.grey.shade600),
-        const SizedBox(width: 2),
-        Text('$total', style: TextStyle(color: Colors.grey.shade600, fontSize: 12)),
-      ],
-    );
-  }
-
-  Color _getBpColor(int systolic, int diastolic) {
-    if (systolic < 120 && diastolic < 80) return Colors.green;
-    if (systolic < 130 && diastolic < 85) return Colors.lightGreen;
-    if (systolic < 140 || diastolic < 90) return Colors.orange;
-    return Colors.red;
-  }
-
-  Widget _buildProgressBar(double progress) {
-    return SizedBox(
-      height: 6,
-      width: 60,
-      child: LinearProgressIndicator(
-        value: progress.clamp(0, 1),
-        backgroundColor: Colors.grey.shade300,
-        valueColor: AlwaysStoppedAnimation(
-          progress >= 1 ? Colors.green : Theme.of(context).colorScheme.primary,
-        ),
-        borderRadius: BorderRadius.circular(3),
-      ),
-    );
-  }
-
-  Widget _buildQuickAddGrid() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          '⚡ Quick Add',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            if (_preferences?['enable_blood_pressure'] == true)
-              Expanded(child: _buildQuickAddButton('💉', 'BP', () => _showQuickAdd('bp'))),
-            if (_preferences?['enable_mood'] == true)
-              Expanded(child: _buildQuickAddButton('😊', 'Mood', () => _showQuickAdd('mood'))),
-            if (_preferences?['enable_water'] == true)
-              Expanded(child: _buildQuickAddButton('💧', 'Water', () => _showQuickAdd('water'))),
-            if (_preferences?['enable_steps'] == true)
-              Expanded(child: _buildQuickAddButton('👟', 'Steps', () => _showQuickAdd('steps'))),
-            if (_preferences?['enable_weight'] == true)
-              Expanded(child: _buildQuickAddButton('⚖️', 'Weight', () => _showQuickAdd('weight'))),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildQuickAddButton(String emoji, String label, VoidCallback onTap) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Theme.of(context).colorScheme.outline.withOpacity(0.3)),
-          ),
-          child: Column(
-            children: [
-              Text(emoji, style: const TextStyle(fontSize: 24)),
-              const SizedBox(height: 4),
-              Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _showQuickAddMenu() {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (ctx) => Container(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Quick Add Entry',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              children: [
-                if (_preferences?['enable_blood_pressure'] == true)
-                  _buildBottomSheetChip('💉 Blood Pressure', () {
-                    Navigator.pop(ctx);
-                    _showQuickAdd('bp');
-                  }),
-                if (_preferences?['enable_mood'] == true)
-                  _buildBottomSheetChip('😊 Mood', () {
-                    Navigator.pop(ctx);
-                    _showQuickAdd('mood');
-                  }),
-                if (_preferences?['enable_water'] == true)
-                  _buildBottomSheetChip('💧 Water', () {
-                    Navigator.pop(ctx);
-                    _showQuickAdd('water');
-                  }),
-                if (_preferences?['enable_steps'] == true)
-                  _buildBottomSheetChip('👟 Steps', () {
-                    Navigator.pop(ctx);
-                    _showQuickAdd('steps');
-                  }),
-                if (_preferences?['enable_weight'] == true)
-                  _buildBottomSheetChip('⚖️ Weight', () {
-                    Navigator.pop(ctx);
-                    _showQuickAdd('weight');
-                  }),
-              ],
-            ),
-            const SizedBox(height: 16),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBottomSheetChip(String label, VoidCallback onTap) {
-    return ActionChip(
-      label: Text(label),
-      avatar: Text(label.split(' ')[0]),
-      onPressed: onTap,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-    );
-  }
-
   Widget _buildWeeklyOverview() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -653,35 +307,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildInsightsCard() {
-    final bpTotal = int.tryParse(_stats?['bp']?['total']?.toString() ?? '0') ?? 0;
-    final avgSystolic = int.tryParse(_stats?['bp']?['avg_systolic']?.toString() ?? '0') ?? 0;
-    final avgDiastolic = int.tryParse(_stats?['bp']?['avg_diastolic']?.toString() ?? '0') ?? 0;
-
-    String insight = 'Start tracking to get insights!';
-    if (bpTotal > 0) {
-      if (avgSystolic >= 140 || avgDiastolic >= 90) {
-        insight = '⚠️ Your average BP is elevated. Consider reducing salt intake and exercising more.';
-      } else if (avgSystolic >= 130 || avgDiastolic >= 85) {
-        insight = '💡 Your BP is slightly high. Regular monitoring recommended.';
-      } else {
-        insight = '✅ Great job! Your BP is in a healthy range. Keep it up!';
-      }
-    }
-
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3),
         borderRadius: BorderRadius.circular(16),
       ),
-      child: Row(
+      child: const Row(
         children: [
-          const Icon(Icons.lightbulb, color: Colors.amber),
-          const SizedBox(width: 12),
+          Icon(Icons.lightbulb, color: Colors.amber),
+          SizedBox(width: 12),
           Expanded(
             child: Text(
-              insight,
-              style: const TextStyle(fontSize: 14),
+              'Open a daily tracker from the redesigned v2 preview to start logging insights.',
+              style: TextStyle(fontSize: 14),
             ),
           ),
         ],

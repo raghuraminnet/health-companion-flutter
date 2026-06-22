@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../services/api_service.dart';
 import '../models/user.dart';
 import '../utils/theme.dart';
+import 'v2/preview_v2.dart';
 
 class ProfileScreen extends StatefulWidget {
   final VoidCallback? onLogout;
@@ -96,6 +97,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _buildProfileCard(),
                   const SizedBox(height: 16),
                   _buildThemeSelector(currentTheme),
+              const SizedBox(height: 12),
+              Card(
+                child: ListTile(
+                  leading: const Icon(Icons.palette_outlined),
+                  title: const Text('Preview v2 redesign'),
+                  subtitle: const Text(
+                      'Direction B — Friendly Wellness (light)'),
+                  trailing: const Icon(Icons.arrow_forward_ios, size: 14),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const V2PreviewScreen(),
+                    ),
+                  ),
+                ),
+              ),
                   const SizedBox(height: 16),
                   _buildSettingsSection(),
                   const SizedBox(height: 24),

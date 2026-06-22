@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'services/api_service.dart';
 import 'screens/auth_screen.dart';
-import 'screens/dashboard_screen.dart';
-import 'utils/theme.dart';
+import 'screens/v2/dashboard_v2.dart';
+import 'screens/v2/v2_theme.dart';
 
 void main() {
   runApp(const HealthCompanionApp());
@@ -17,9 +17,9 @@ class HealthCompanionApp extends StatelessWidget {
     return MaterialApp(
       title: 'Health Companion',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.light,
-      darkTheme: AppTheme.dark,
-      themeMode: ThemeMode.dark,
+      theme: buildV2LightTheme(),
+      darkTheme: buildV2DarkTheme(),
+      themeMode: ThemeMode.light,
       home: const AuthCheck(),
     );
   }
@@ -97,18 +97,7 @@ class _AuthCheckState extends State<AuthCheck> {
     }
 
     if (_isLoggedIn) {
-      return DashboardScreen(
-        onLogout: () async {
-          final prefs = await SharedPreferences.getInstance();
-          await prefs.remove('auth_token');
-          ApiService().clearToken();
-          if (mounted) {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (_) => const AuthScreen()),
-            );
-          }
-        },
-      );
+      return DashboardV2();
     }
 
     return const AuthScreen();

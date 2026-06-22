@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import 'v2/preview_v2.dart';
 
 class SettingsScreen extends StatefulWidget {
   final VoidCallback onLogout;
@@ -220,6 +221,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     title: const Text('Logout', style: TextStyle(color: Colors.red)),
                     onTap: widget.onLogout,
                   ),
+                  _buildV2PreviewTile(),
                 ],
               ),
             ),
@@ -320,6 +322,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: Text(o),
           )).toList(),
           onChanged: (v) => onChanged(v!),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildV2PreviewTile() {
+    return Card(
+      color: const Color(0xFFEDE9FE),
+      child: ListTile(
+        leading: const Icon(Icons.auto_awesome, color: Color(0xFF6D28D9)),
+        title: const Text('Preview v2 redesign',
+            style: TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: const Text(
+            'Direction B \u2014 Friendly Wellness (light theme)'),
+        trailing: const Icon(Icons.arrow_forward_ios, size: 14),
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const V2PreviewScreen()),
         ),
       ),
     );

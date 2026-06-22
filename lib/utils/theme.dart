@@ -18,7 +18,7 @@ class AppTheme {
       elevation: 0,
       centerTitle: true,
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: const Color(0xFF1E1E2E),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
     ),
@@ -65,7 +65,7 @@ class AppTheme {
       iconTheme: IconThemeData(color: Color(0xFF1E1E2E)),
       titleTextStyle: TextStyle(color: Color(0xFF1E1E2E), fontSize: 18, fontWeight: FontWeight.w600),
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       elevation: 2,
@@ -111,7 +111,7 @@ class AppTheme {
       elevation: 0,
       centerTitle: true,
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: const Color(0xFF1E1520),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
     ),
@@ -158,7 +158,7 @@ class AppTheme {
       iconTheme: IconThemeData(color: Color(0xFF1E1E2E)),
       titleTextStyle: TextStyle(color: Color(0xFF1E1E2E), fontSize: 18, fontWeight: FontWeight.w600),
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
