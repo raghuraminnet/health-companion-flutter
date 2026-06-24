@@ -5,12 +5,11 @@ class AppTheme {
   static ThemeData dark = ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,
-    colorScheme: ColorScheme.dark(
-      primary: const Color(0xFF7C3AED),
-      secondary: const Color(0xFFA78BFA),
-      surface: const Color(0xFF1E1E2E),
-      background: const Color(0xFF0F0F1A),
-      error: const Color(0xFFEF4444),
+    colorScheme: const ColorScheme.dark(
+      primary: Color(0xFF7C3AED),
+      secondary: Color(0xFFA78BFA),
+      surface: Color(0xFF1E1E2E),
+      error: Color(0xFFEF4444),
     ),
     scaffoldBackgroundColor: const Color(0xFF0F0F1A),
     appBarTheme: const AppBarTheme(
@@ -50,12 +49,11 @@ class AppTheme {
   static ThemeData light = ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
-    colorScheme: ColorScheme.light(
-      primary: const Color(0xFF7C3AED),
-      secondary: const Color(0xFFA78BFA),
+    colorScheme: const ColorScheme.light(
+      primary: Color(0xFF7C3AED),
+      secondary: Color(0xFFA78BFA),
       surface: Colors.white,
-      background: const Color(0xFFF8F8FC),
-      error: const Color(0xFFEF4444),
+      error: Color(0xFFEF4444),
     ),
     scaffoldBackgroundColor: const Color(0xFFF8F8FC),
     appBarTheme: const AppBarTheme(
@@ -98,12 +96,11 @@ class AppTheme {
   static ThemeData pink = ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,
-    colorScheme: ColorScheme.dark(
-      primary: const Color(0xFFEC4899),
-      secondary: const Color(0xFFF472B6),
-      surface: const Color(0xFF1E1520),
-      background: const Color(0xFF0F0D12),
-      error: const Color(0xFFEF4444),
+    colorScheme: const ColorScheme.dark(
+      primary: Color(0xFFEC4899),
+      secondary: Color(0xFFF472B6),
+      surface: Color(0xFF1E1520),
+      error: Color(0xFFEF4444),
     ),
     scaffoldBackgroundColor: const Color(0xFF0F0D12),
     appBarTheme: const AppBarTheme(
@@ -143,12 +140,11 @@ class AppTheme {
   static ThemeData white = ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
-    colorScheme: ColorScheme.light(
-      primary: const Color(0xFF3B82F6),
-      secondary: const Color(0xFF60A5FA),
+    colorScheme: const ColorScheme.light(
+      primary: Color(0xFF3B82F6),
+      secondary: Color(0xFF60A5FA),
       surface: Colors.white,
-      background: Colors.white,
-      error: const Color(0xFFEF4444),
+      error: Color(0xFFEF4444),
     ),
     scaffoldBackgroundColor: Colors.white,
     appBarTheme: const AppBarTheme(

@@ -47,8 +47,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
         api.getSettings(),
       ]);
       
-      final prefs = results[0] as Map<String, dynamic>;
-      final sett = results[1] as Map<String, dynamic>;
+      final prefs = results[0];
+      final sett = results[1];
       
       setState(() {
         _preferences = prefs;
@@ -193,7 +193,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   _buildSliderTile(
                     'Steps Goal',
-                    '${_stepsGoal}',
+                    '$_stepsGoal',
                     Icons.directions_walk,
                     _stepsGoal.toDouble(),
                     1000,

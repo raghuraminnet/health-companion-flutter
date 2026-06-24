@@ -20,7 +20,7 @@ class WaterV2 extends StatelessWidget {
             SizedBox(height: 16),
             _QuickAdd(),
             SizedBox(height: 20),
-            _7DayBars(),
+            _SevenDayBars(),
             SizedBox(height: 20),
             _SectionLabel('History'),
             SizedBox(height: 12),
@@ -54,7 +54,7 @@ class _LatestHero extends StatelessWidget {
   Widget build(BuildContext context) {
     const today = 2100.0;
     const goal = 2500.0;
-    final pct = today / goal;
+    const pct = today / goal;
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
       decoration: BoxDecoration(
@@ -66,12 +66,12 @@ class _LatestHero extends StatelessWidget {
         SizedBox(
           width: 110, height: 110,
           child: Stack(alignment: Alignment.center, children: [
-            SizedBox.expand(
+            const SizedBox.expand(
               child: CircularProgressIndicator(
                 value: pct,
                 strokeWidth: 10,
                 backgroundColor: V2Colors.waterSoft,
-                valueColor: const AlwaysStoppedAnimation(V2Colors.water),
+                valueColor: AlwaysStoppedAnimation(V2Colors.water),
                 strokeCap: StrokeCap.round,
               ),
             ),
@@ -133,11 +133,11 @@ class _QuickAdd extends StatelessWidget {
   const _QuickAdd();
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
+    return const Row(children: [
       Expanded(child: _QuickBtn('250 ml', Icons.local_drink_rounded, V2Colors.water)),
-      const SizedBox(width: 10),
+      SizedBox(width: 10),
       Expanded(child: _QuickBtn('500 ml', Icons.local_drink_rounded, V2Colors.water)),
-      const SizedBox(width: 10),
+      SizedBox(width: 10),
       Expanded(child: _QuickBtn('1 glass', Icons.water_drop_rounded, V2Colors.water)),
     ]);
   }
@@ -172,8 +172,8 @@ class _QuickBtn extends StatelessWidget {
   }
 }
 
-class _7DayBars extends StatelessWidget {
-  const _7DayBars();
+class _SevenDayBars extends StatelessWidget {
+  const _SevenDayBars();
   @override
   Widget build(BuildContext context) {
     final data = V2Sample.waterMl;
@@ -202,7 +202,7 @@ class _7DayBars extends StatelessWidget {
               gridData: FlGridData(
                 show: true, drawVerticalLine: false,
                 horizontalInterval: 1000,
-                getDrawingHorizontalLine: (_) => FlLine(
+                getDrawingHorizontalLine: (_) => const FlLine(
                   color: V2Colors.border, strokeWidth: 1, dashArray: [3, 3]),
               ),
               titlesData: FlTitlesData(

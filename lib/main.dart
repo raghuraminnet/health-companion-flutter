@@ -97,7 +97,7 @@ class _AuthCheckState extends State<AuthCheck> {
     }
 
     if (_isLoggedIn) {
-      return DashboardV2();
+      return const DashboardV2();
     }
 
     return const AuthScreen();

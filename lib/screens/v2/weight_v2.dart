@@ -20,7 +20,7 @@ class WeightV2 extends StatelessWidget {
             SizedBox(height: 16),
             _StatsRow(),
             SizedBox(height: 20),
-            _7DayTrend(),
+            _SevenDayTrend(),
             SizedBox(height: 20),
             _SectionLabel('History'),
             SizedBox(height: 12),
@@ -245,7 +245,7 @@ class _StatsRow extends StatelessWidget {
         color: down ? const Color(0xFF10B981) : const Color(0xFFF59E0B),
       )),
       const SizedBox(width: 10),
-      Expanded(child: _StatTile(
+      const Expanded(child: _StatTile(
         label: 'Goal', value: '70.0', unit: 'kg',
         icon: Icons.track_changes_rounded, color: V2Colors.weight,
       )),
@@ -295,14 +295,14 @@ class _StatTile extends StatelessWidget {
   }
 }
 
-class _7DayTrend extends StatelessWidget {
-  const _7DayTrend();
+class _SevenDayTrend extends StatelessWidget {
+  const _SevenDayTrend();
   @override
   Widget build(BuildContext context) {
     final data = V2Sample.weightKg;
     final minVal = data.reduce((a, b) => a < b ? a : b);
     final maxVal = data.reduce((a, b) => a > b ? a : b);
-    final pad = 0.5;
+    const pad = 0.5;
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 18, 20, 16),
       decoration: BoxDecoration(
@@ -329,7 +329,7 @@ class _7DayTrend extends StatelessWidget {
               gridData: FlGridData(
                 show: true, drawVerticalLine: false,
                 horizontalInterval: 0.5,
-                getDrawingHorizontalLine: (_) => FlLine(
+                getDrawingHorizontalLine: (_) => const FlLine(
                   color: V2Colors.border, strokeWidth: 1, dashArray: [3, 3]),
               ),
               titlesData: FlTitlesData(

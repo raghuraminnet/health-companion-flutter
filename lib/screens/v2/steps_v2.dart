@@ -20,7 +20,7 @@ class StepsV2 extends StatelessWidget {
             SizedBox(height: 16),
             _QuickAdd(),
             SizedBox(height: 20),
-            _7DayArea(),
+            _SevenDayArea(),
             SizedBox(height: 20),
             _SectionLabel('History'),
             SizedBox(height: 12),
@@ -142,7 +142,7 @@ class _LatestHero extends StatelessWidget {
   Widget build(BuildContext context) {
     const today = 7560.0;
     const goal = 10000.0;
-    final pct = today / goal;
+    const pct = today / goal;
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
       decoration: BoxDecoration(
@@ -154,12 +154,12 @@ class _LatestHero extends StatelessWidget {
         SizedBox(
           width: 110, height: 110,
           child: Stack(alignment: Alignment.center, children: [
-            SizedBox.expand(
+            const SizedBox.expand(
               child: CircularProgressIndicator(
                 value: pct,
                 strokeWidth: 10,
                 backgroundColor: V2Colors.stepsSoft,
-                valueColor: const AlwaysStoppedAnimation(V2Colors.steps),
+                valueColor: AlwaysStoppedAnimation(V2Colors.steps),
                 strokeCap: StrokeCap.round,
               ),
             ),
@@ -221,11 +221,11 @@ class _QuickAdd extends StatelessWidget {
   const _QuickAdd();
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
+    return const Row(children: [
       Expanded(child: _QuickBtn('1,000', Icons.directions_walk_rounded)),
-      const SizedBox(width: 10),
+      SizedBox(width: 10),
       Expanded(child: _QuickBtn('2,500', Icons.directions_walk_rounded)),
-      const SizedBox(width: 10),
+      SizedBox(width: 10),
       Expanded(child: _QuickBtn('5,000', Icons.directions_walk_rounded)),
     ]);
   }
@@ -259,8 +259,8 @@ class _QuickBtn extends StatelessWidget {
   }
 }
 
-class _7DayArea extends StatelessWidget {
-  const _7DayArea();
+class _SevenDayArea extends StatelessWidget {
+  const _SevenDayArea();
   @override
   Widget build(BuildContext context) {
     final data = V2Sample.steps;
@@ -292,7 +292,7 @@ class _7DayArea extends StatelessWidget {
               gridData: FlGridData(
                 show: true, drawVerticalLine: false,
                 horizontalInterval: 3000,
-                getDrawingHorizontalLine: (_) => FlLine(
+                getDrawingHorizontalLine: (_) => const FlLine(
                   color: V2Colors.border, strokeWidth: 1, dashArray: [3, 3]),
               ),
               titlesData: FlTitlesData(

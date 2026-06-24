@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/api_service.dart';
 import '../models/user.dart';
-import '../utils/theme.dart';
 import 'v2/preview_v2.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -131,7 +130,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             CircleAvatar(
               radius: 35,
-              backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+              backgroundColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
               child: Text(
                 _user?.name.substring(0, 1).toUpperCase() ?? 'U',
                 style: TextStyle(
@@ -208,8 +207,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         height: 60,
         decoration: BoxDecoration(
           color: isSelected
-              ? Theme.of(context).colorScheme.primary.withOpacity(0.3)
-              : Colors.grey.withOpacity(0.1),
+              ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.3)
+              : Colors.grey.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
           border: isSelected
               ? Border.all(color: Theme.of(context).colorScheme.primary, width: 2)

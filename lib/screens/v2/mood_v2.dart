@@ -18,7 +18,7 @@ class MoodV2 extends StatelessWidget {
             SizedBox(height: 12),
             _LatestHero(),
             SizedBox(height: 20),
-            _7DayArea(),
+            _SevenDayArea(),
             SizedBox(height: 20),
             _SectionLabel('History'),
             SizedBox(height: 12),
@@ -191,15 +191,15 @@ class _LatestHero extends StatelessWidget {
           ),
         ]),
         const SizedBox(height: 18),
-        Row(children: [
+        const Row(children: [
           Expanded(child: _StatTile(
             label: 'Sleep', value: '4.2', unit: '/ 5',
-            icon: Icons.bedtime_rounded, color: const Color(0xFF8B5CF6),
+            icon: Icons.bedtime_rounded, color: Color(0xFF8B5CF6),
           )),
-          const SizedBox(width: 10),
+          SizedBox(width: 10),
           Expanded(child: _StatTile(
             label: 'Energy', value: '4.6', unit: '/ 5',
-            icon: Icons.bolt_rounded, color: const Color(0xFFF59E0B),
+            icon: Icons.bolt_rounded, color: Color(0xFFF59E0B),
           )),
         ]),
       ]),
@@ -248,8 +248,8 @@ class _StatTile extends StatelessWidget {
   }
 }
 
-class _7DayArea extends StatelessWidget {
-  const _7DayArea();
+class _SevenDayArea extends StatelessWidget {
+  const _SevenDayArea();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -284,7 +284,7 @@ class _7DayArea extends StatelessWidget {
               gridData: FlGridData(
                 show: true, drawVerticalLine: false,
                 horizontalInterval: 1,
-                getDrawingHorizontalLine: (_) => FlLine(
+                getDrawingHorizontalLine: (_) => const FlLine(
                   color: V2Colors.border, strokeWidth: 1, dashArray: [3, 3]),
               ),
               titlesData: FlTitlesData(

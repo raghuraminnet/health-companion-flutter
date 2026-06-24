@@ -172,7 +172,6 @@ ThemeData buildV2DarkTheme() {
   const bg = Color(0xFF0B0B10);
   const surface = Color(0xFF14141C);
   const text = Color(0xFFF5F5F7);
-  const textMuted = Color(0xFF9CA3AF);
 
   final base = ThemeData.dark(useMaterial3: true);
   return base.copyWith(
@@ -187,7 +186,7 @@ ThemeData buildV2DarkTheme() {
       bodyColor: text,
       displayColor: text,
     ),
-    appBarTheme: AppBarTheme(
+    appBarTheme: const AppBarTheme(
       backgroundColor: bg,
       foregroundColor: text,
       elevation: 0,

@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,7 +19,7 @@ class BpV2 extends StatelessWidget {
             SizedBox(height: 12),
             _LatestHero(),
             SizedBox(height: 20),
-            _7DayTrend(),
+            _SevenDayTrend(),
             SizedBox(height: 20),
             _SectionLabel('History'),
             SizedBox(height: 12),
@@ -229,8 +228,8 @@ class _LatestHero extends StatelessWidget {
   }
 }
 
-class _7DayTrend extends StatelessWidget {
-  const _7DayTrend();
+class _SevenDayTrend extends StatelessWidget {
+  const _SevenDayTrend();
   @override
   Widget build(BuildContext context) {
     final sys = V2Sample.bpSys;
@@ -250,9 +249,9 @@ class _7DayTrend extends StatelessWidget {
               Text('7-day trend',
                   style: Theme.of(context).textTheme.titleMedium),
               const Spacer(),
-              _LegendDot(color: V2Colors.bp, label: 'Sys'),
+              const _LegendDot(color: V2Colors.bp, label: 'Sys'),
               const SizedBox(width: 12),
-              _LegendDot(color: const Color(0xFFFB7185), label: 'Dia'),
+              const _LegendDot(color: Color(0xFFFB7185), label: 'Dia'),
             ],
           ),
           const SizedBox(height: 14),
@@ -266,7 +265,7 @@ class _7DayTrend extends StatelessWidget {
                   show: true,
                   drawVerticalLine: false,
                   horizontalInterval: 20,
-                  getDrawingHorizontalLine: (_) => FlLine(
+                  getDrawingHorizontalLine: (_) => const FlLine(
                     color: V2Colors.border,
                     strokeWidth: 1,
                     dashArray: [4, 4],
@@ -523,15 +522,15 @@ class _AddSheet extends StatelessWidget {
           Text('Log a reading',
               style: Theme.of(context).textTheme.headlineMedium),
           const SizedBox(height: 18),
-          Row(
+          const Row(
             children: [
               Expanded(child: _NumField(label: 'Systolic', unit: 'mmHg')),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Expanded(child: _NumField(label: 'Diastolic', unit: 'mmHg')),
             ],
           ),
           const SizedBox(height: 12),
-          _NumField(label: 'Pulse', unit: 'bpm'),
+          const _NumField(label: 'Pulse', unit: 'bpm'),
           const SizedBox(height: 18),
           SizedBox(
             width: double.infinity,

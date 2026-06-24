@@ -54,7 +54,7 @@ class _Header extends StatelessWidget {
             ],
           ),
         ),
-        _CircleIcon(
+        const _CircleIcon(
           icon: Icons.search_rounded,
           bg: V2Colors.surface,
           border: V2Colors.border,
@@ -72,9 +72,9 @@ class _Avatar extends StatelessWidget {
     return Container(
       width: 44,
       height: 44,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         shape: BoxShape.circle,
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           colors: [V2Colors.brand, V2Colors.weight],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -272,7 +272,7 @@ class _RingPainter extends CustomPainter {
   _RingPainter({required this.progress});
   @override
   void paint(Canvas canvas, Size size) {
-    final stroke = 10.0;
+    const stroke = 10.0;
     final rect = Offset.zero & size;
     final center = rect.center;
     final radius = (size.shortestSide - stroke) / 2;

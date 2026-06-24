@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../services/api_service.dart';
 import '../models/pregnancy.dart';
 
 class PregnancyScreen extends StatefulWidget {

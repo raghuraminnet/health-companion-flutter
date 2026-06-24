@@ -124,7 +124,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.red.withOpacity(0.1),
+                      color: Colors.red.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
@@ -147,7 +147,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     children: [
                       Expanded(
                         child: DropdownButtonFormField<String>(
-                          value: _gender,
+                          initialValue: _gender,
                           decoration: const InputDecoration(
                             labelText: 'Gender',
                             prefixIcon: Icon(Icons.wc),
@@ -163,7 +163,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       const SizedBox(width: 16),
                       Expanded(
                         child: DropdownButtonFormField<int>(
-                          value: _yearOfBirth,
+                          initialValue: _yearOfBirth,
                           decoration: const InputDecoration(
                             labelText: 'Year',
                             prefixIcon: Icon(Icons.calendar_today),
