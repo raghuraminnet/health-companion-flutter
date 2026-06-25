@@ -2,12 +2,68 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../services/api_service.dart';
+import '../../services/session.dart';
 import 'v2_theme.dart';
 import 'sample_data.dart';
+import 'profile_v2.dart';
 
 
-class DashboardV2 extends StatelessWidget {
+class DashboardV2 extends StatefulWidget {
   const DashboardV2({super.key});
+
+  @override
+  State<DashboardV2> createState() => _DashboardV2State();
+}
+
+class _DashboardV2State extends State<DashboardV2> {
+  String _initial = 'D';
+  String _name = 'there';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUser();
+  }
+
+  Future<void> _loadUser() async {
+    try {
+      final api = ApiService();
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('auth_token');
+      if (token != null) api.setToken(token);
+      final user = await api.getMe();
+      if (!mounted) return;
+      setState(() {
+        _name = user.name.split(' ').first;
+        _initial = user.name.isNotEmpty
+            ? user.name.substring(0, 1).toUpperCase()
+            : 'D';
+      });
+    } catch (_) {
+      // Demo fallback stays as-is.
+    }
+  }
+
+  Future<void> _logout() async {
+    try {
+      await ApiService().logout();
+    } catch (_) {
+      // Best-effort — clear local state regardless.
+    }
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('auth_token');
+    // Flip the global auth signal — AuthCheck will rebuild into AuthScreen.
+    setAuthed(false);
+  }
+
+  void _openProfile() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => ProfileV2(onLogout: _logout)),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,28 +72,35 @@ class DashboardV2 extends StatelessWidget {
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 12, 20, 100),
-          children: const [
-            _Header(),
-            SizedBox(height: 20),
-            _HeroScore(),
-            SizedBox(height: 24),
-            _SectionLabel('Today'),
-            SizedBox(height: 12),
-            _MetricGrid(),
-            SizedBox(height: 24),
-            _SectionLabel('Recent entries'),
-            SizedBox(height: 12),
-            _RecentList(),
+          children: [
+            _Header(name: _name, onAvatar: _openProfile, initial: _initial),
+            const SizedBox(height: 20),
+            const _HeroScore(),
+            const SizedBox(height: 24),
+            const _SectionLabel('Today'),
+            const SizedBox(height: 12),
+            const _MetricGrid(),
+            const SizedBox(height: 24),
+            const _SectionLabel('Recent entries'),
+            const SizedBox(height: 12),
+            const _RecentList(),
           ],
         ),
       ),
-      floatingActionButton: _PillFab(),
+      floatingActionButton: const _PillFab(),
     );
   }
 }
 
 class _Header extends StatelessWidget {
-  const _Header();
+  final String name;
+  final String initial;
+  final VoidCallback onAvatar;
+  const _Header({
+    required this.name,
+    required this.initial,
+    required this.onAvatar,
+  });
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -46,10 +109,10 @@ class _Header extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Good evening, Demo 👋',
+              Text('Good day, $name 👋',
                   style: Theme.of(context).textTheme.bodyMedium),
               const SizedBox(height: 4),
-              Text('Sunday, Jun 21',
+              Text(_today(),
                   style: Theme.of(context).textTheme.headlineMedium),
             ],
           ),
@@ -60,33 +123,69 @@ class _Header extends StatelessWidget {
           border: V2Colors.border,
         ),
         const SizedBox(width: 8),
-        _Avatar(),
+        _Avatar(initial: initial, onTap: onAvatar),
       ],
     );
+  }
+
+  String _today() {
+    final now = DateTime.now();
+    const weekdays = [
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday',
+    ];
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    return '${weekdays[now.weekday - 1]}, '
+        '${months[now.month - 1]} ${now.day}';
   }
 }
 
 class _Avatar extends StatelessWidget {
+  final String initial;
+  final VoidCallback onTap;
+  const _Avatar({required this.initial, required this.onTap});
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 44,
-      height: 44,
-      decoration: const BoxDecoration(
-        shape: BoxShape.circle,
-        gradient: LinearGradient(
-          colors: [V2Colors.brand, V2Colors.weight],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(999),
+      child: Container(
+        width: 44,
+        height: 44,
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: LinearGradient(
+            colors: [V2Colors.brand, V2Colors.weight],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
         ),
-      ),
-      alignment: Alignment.center,
-      child: Text(
-        'D',
-        style: GoogleFonts.plusJakartaSans(
-          color: Colors.white,
-          fontWeight: FontWeight.w700,
-          fontSize: 18,
+        alignment: Alignment.center,
+        child: Text(
+          initial,
+          style: GoogleFonts.plusJakartaSans(
+            color: Colors.white,
+            fontWeight: FontWeight.w700,
+            fontSize: 18,
+          ),
         ),
       ),
     );
@@ -632,6 +731,7 @@ class _RecentItem {
 }
 
 class _PillFab extends StatelessWidget {
+  const _PillFab();
   @override
   Widget build(BuildContext context) {
     return Container(

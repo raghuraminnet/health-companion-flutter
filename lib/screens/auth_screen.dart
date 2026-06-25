@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/api_service.dart';
-import 'v2/dashboard_v2.dart';
+import '../services/session.dart';
 
 class AuthScreen extends StatefulWidget {
   final VoidCallback? onAuthSuccess;
@@ -70,15 +70,10 @@ class _AuthScreenState extends State<AuthScreen> {
       final token = result['token'] as String;
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('auth_token', token);
-      
+
       ApiService().setToken(token);
-      if (mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (_) => const DashboardV2(),
-          ),
-        );
-      }
+      // Flip the global auth signal; AuthCheck will rebuild into DashboardV2.
+      setAuthed(true);
     } catch (e) {
       setState(() => _error = e.toString().replaceAll('Exception: ', ''));
     } finally {

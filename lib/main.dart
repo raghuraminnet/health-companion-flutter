@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'services/api_service.dart';
+import 'services/session.dart';
 import 'screens/auth_screen.dart';
 import 'screens/v2/dashboard_v2.dart';
 import 'screens/v2/v2_theme.dart';
@@ -39,32 +40,58 @@ class _AuthCheckState extends State<AuthCheck> {
   @override
   void initState() {
     super.initState();
+    authNotifier.addListener(_onAuthChanged);
     _checkAuth();
   }
 
+  @override
+  void dispose() {
+    authNotifier.removeListener(_onAuthChanged);
+    super.dispose();
+  }
+
+  void _onAuthChanged() {
+    // Login / logout flips the notifier → re-verify the token and rebuild.
+    if (mounted) _checkAuth();
+  }
+
   Future<void> _checkAuth() async {
+    setState(() => _isLoading = true);
     try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('auth_token');
-      
+
+      bool loggedIn = false;
       if (token != null) {
-        // Verify token is still valid
         try {
           final api = ApiService();
           api.setToken(token);
           await api.getMe();
-          _isLoggedIn = true;
+          loggedIn = true;
         } catch (e) {
-          // Token invalid, clear it
+          // Token invalid — clear it so we don't loop on a bad token.
           await prefs.remove('auth_token');
-          _isLoggedIn = false;
+          loggedIn = false;
         }
       }
+      if (mounted) {
+        setState(() {
+          _isLoggedIn = loggedIn;
+          _isLoading = false;
+        });
+        // Keep the notifier in sync with reality (e.g. if the token
+        // turned out to be stale and we just cleared it).
+        setAuthed(loggedIn);
+      }
     } catch (e) {
-      _isLoggedIn = false;
+      if (mounted) {
+        setState(() {
+          _isLoggedIn = false;
+          _isLoading = false;
+        });
+        setAuthed(false);
+      }
     }
-    
-    setState(() => _isLoading = false);
   }
 
   @override
