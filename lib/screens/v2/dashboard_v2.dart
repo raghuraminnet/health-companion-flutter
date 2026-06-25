@@ -8,6 +8,11 @@ import '../../services/session.dart';
 import 'v2_theme.dart';
 import 'sample_data.dart';
 import 'profile_v2.dart';
+import 'bp_v2.dart';
+import 'mood_v2.dart';
+import 'water_v2.dart';
+import 'steps_v2.dart';
+import 'weight_v2.dart';
 
 
 class DashboardV2 extends StatefulWidget {
@@ -65,6 +70,17 @@ class _DashboardV2State extends State<DashboardV2> {
     );
   }
 
+  void _showLogPicker(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: V2Colors.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      ),
+      builder: (_) => const _LogPickerSheet(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,7 +103,9 @@ class _DashboardV2State extends State<DashboardV2> {
           ],
         ),
       ),
-      floatingActionButton: const _PillFab(),
+      floatingActionButton: _PillFab(
+        onTap: () => _showLogPicker(context),
+      ),
     );
   }
 }
@@ -439,6 +457,7 @@ class _MetricGrid extends StatelessWidget {
           color: V2Colors.bp,
           soft: V2Colors.bpSoft,
           chart: V2Sample.bpSys,
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const BpV2())),
         ),
         _MetricCard(
           label: 'Mood',
@@ -450,6 +469,7 @@ class _MetricGrid extends StatelessWidget {
           color: V2Colors.mood,
           soft: V2Colors.moodSoft,
           chart: V2Sample.moodScores,
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const MoodV2())),
         ),
         _MetricCard(
           label: 'Water',
@@ -461,6 +481,7 @@ class _MetricGrid extends StatelessWidget {
           color: V2Colors.water,
           soft: V2Colors.waterSoft,
           chart: V2Sample.waterMl,
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const WaterV2())),
         ),
         _MetricCard(
           label: 'Steps',
@@ -472,6 +493,7 @@ class _MetricGrid extends StatelessWidget {
           color: V2Colors.steps,
           soft: V2Colors.stepsSoft,
           chart: V2Sample.steps,
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const StepsV2())),
         ),
       ],
     );
@@ -488,6 +510,7 @@ class _MetricCard extends StatelessWidget {
   final Color color;
   final Color soft;
   final List<double> chart;
+  final VoidCallback? onTap;
   const _MetricCard({
     required this.label,
     required this.value,
@@ -498,11 +521,12 @@ class _MetricCard extends StatelessWidget {
     required this.color,
     required this.soft,
     required this.chart,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final card = Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: V2Colors.surface,
@@ -622,6 +646,14 @@ class _MetricCard extends StatelessWidget {
         ],
       ),
     );
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(24),
+        child: card,
+      ),
+    );
   }
 }
 
@@ -731,14 +763,15 @@ class _RecentItem {
 }
 
 class _PillFab extends StatelessWidget {
-  const _PillFab();
+  final VoidCallback onTap;
+  const _PillFab({required this.onTap});
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       height: 54,
       child: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: onTap,
         backgroundColor: V2Colors.text,
         foregroundColor: Colors.white,
         elevation: 0,
@@ -754,6 +787,130 @@ class _PillFab extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+// ─── Log Entry Picker Sheet ───────────────────────────────────────────
+class _LogPickerSheet extends StatelessWidget {
+  const _LogPickerSheet();
+
+  void _push(BuildContext context, Widget page) {
+    Navigator.pop(context);
+    Navigator.push(context, MaterialPageRoute(builder: (_) => page));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 4),
+              child: Row(
+                children: [
+                  Text(
+                    'Log entry',
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      color: V2Colors.text,
+                    ),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    icon: const Icon(Icons.close_rounded),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'What are you logging?',
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 13,
+                    color: V2Colors.textMuted,
+                  ),
+                ),
+              ),
+            ),
+            _PickerTile(
+              icon: Icons.favorite_rounded,
+              color: V2Colors.bp,
+              label: 'Blood Pressure',
+              onTap: () => _push(context, const BpV2()),
+            ),
+            _PickerTile(
+              icon: Icons.emoji_emotions_rounded,
+              color: V2Colors.mood,
+              label: 'Mood',
+              onTap: () => _push(context, const MoodV2()),
+            ),
+            _PickerTile(
+              icon: Icons.water_drop_rounded,
+              color: V2Colors.water,
+              label: 'Water',
+              onTap: () => _push(context, const WaterV2()),
+            ),
+            _PickerTile(
+              icon: Icons.directions_walk_rounded,
+              color: V2Colors.steps,
+              label: 'Steps',
+              onTap: () => _push(context, const StepsV2()),
+            ),
+            _PickerTile(
+              icon: Icons.monitor_weight_rounded,
+              color: V2Colors.steps,
+              label: 'Weight',
+              onTap: () => _push(context, const WeightV2()),
+            ),
+            const SizedBox(height: 12),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PickerTile extends StatelessWidget {
+  final IconData icon;
+  final Color color;
+  final String label;
+  final VoidCallback onTap;
+  const _PickerTile({
+    required this.icon,
+    required this.color,
+    required this.label,
+    required this.onTap,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Container(
+        width: 38,
+        height: 38,
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.15),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Icon(icon, color: color, size: 20),
+      ),
+      title: Text(
+        label,
+        style: GoogleFonts.plusJakartaSans(
+          fontWeight: FontWeight.w600,
+          fontSize: 15,
+          color: V2Colors.text,
+        ),
+      ),
+      trailing: const Icon(Icons.chevron_right_rounded, color: V2Colors.textMuted),
+      onTap: onTap,
     );
   }
 }
