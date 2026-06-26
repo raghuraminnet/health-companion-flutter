@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/user.dart';
 import '../models/bp_entry.dart';
+import '../models/pregnancy.dart';
 
 class ApiService {
   // Use relative URLs - nginx reverse proxy handles API routing
@@ -346,7 +347,51 @@ class ApiService {
     }
   }
 
-  // Steps Entries
+  // Pregnancy Profile
+  Future<PregnancyProfile?> getPregnancyProfile() async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/api/pregnancy'),
+      headers: _headers,
+    );
+    if (response.statusCode == 200) {
+      if (response.body == 'null') return null;
+      return PregnancyProfile.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to get pregnancy profile');
+    }
+  }
+
+  Future<PregnancyProfile> savePregnancyProfile({
+    required DateTime lastPeriodDate,
+    DateTime? dueDate,
+  }) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/api/pregnancy'),
+      headers: _headers,
+      body: jsonEncode({
+        'lastPeriodDate': lastPeriodDate.toIso8601String().split('T')[0],
+        if (dueDate != null) 'dueDate': dueDate.toIso8601String().split('T')[0],
+      }),
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return PregnancyProfile.fromJson(jsonDecode(response.body));
+    } else {
+      final error = jsonDecode(response.body);
+      throw Exception(error['error'] ?? 'Failed to save pregnancy profile');
+    }
+  }
+
+  Future<void> deletePregnancyProfile() async {
+    final response = await http.delete(
+      Uri.parse('$baseUrl/api/pregnancy'),
+      headers: _headers,
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to delete pregnancy profile');
+    }
+  }
+
+// Steps Entries
   Future<List<StepsEntry>> getStepsEntries({int limit = 100, int offset = 0}) async {
     final response = await http.get(
       Uri.parse('$baseUrl/api/steps?limit=$limit&offset=$offset'),

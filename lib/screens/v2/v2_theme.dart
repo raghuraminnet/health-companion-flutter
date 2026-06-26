@@ -27,6 +27,9 @@ class V2Colors {
   static const stepsSoft = Color(0xFFD1FAE5);
   static const weight = Color(0xFF8B5CF6);
   static const weightSoft = Color(0xFFEDE9FE);
+  static const pregnancy = Color(0xFFEC4899);     // pink-500
+  static const pregnancySoft = Color(0xFFFCE7F3); // pink-100
+  static const pregnancyDeep = Color(0xFF9D174D); // pink-800
 
   // Brand
   static const brand = Color(0xFF6D28D9);

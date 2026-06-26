@@ -13,6 +13,7 @@ import 'mood_v2.dart';
 import 'water_v2.dart';
 import 'steps_v2.dart';
 import 'weight_v2.dart';
+import 'pregnancy_v2.dart';
 
 
 class DashboardV2 extends StatefulWidget {
@@ -869,6 +870,12 @@ class _LogPickerSheet extends StatelessWidget {
               color: V2Colors.steps,
               label: 'Weight',
               onTap: () => _push(context, const WeightV2()),
+            ),
+            _PickerTile(
+              icon: Icons.pregnant_woman_rounded,
+              color: V2Colors.pregnancy,
+              label: 'Pregnancy',
+              onTap: () => _push(context, const PregnancyV2()),
             ),
             const SizedBox(height: 12),
           ],
