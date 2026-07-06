@@ -19,6 +19,17 @@ android/app/build/
 android/app/*.apk
 android/app/*.aab
 android/local.properties
+android/.gitignore
+android/app/build.gradle.kts
+android/build.gradle.kts
+android/gradle.properties
+android/gradle/
+android/settings.gradle.kts
+android/build/
+android/app/src/debug/
+android/app/src/main/kotlin/
+android/app/src/main/res/
+android/app/src/profile/
 
 # iOS
 ios/Pods/
@@ -27,6 +38,9 @@ ios/Flutter/Flutter.framework
 ios/Flutter/Flutter.podspec
 ios/Flutter/App.framework
 ios/Flutter/engine.flutter
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+ios/Flutter/ephemeral/
 
 # Generated files
 *.g.dart
@@ -42,8 +56,13 @@ ios/Flutter/engine.flutter
 *.dSYM.zip
 *.dSYM
 
+# Build directories (all platforms)
+build/
+.metadata
+
 # Pub
 pubspec.lock
+pubspec.yaml.bak
 
 # Environment
 .env
@@ -53,3 +72,6 @@ pubspec.lock
 .idea/
 .vscode/
 *.iml
+
+# Screenshots
+screenshots/

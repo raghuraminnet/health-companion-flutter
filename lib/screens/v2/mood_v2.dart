@@ -46,27 +46,6 @@ class _MoodV2State extends State<MoodV2> {
     }
   }
 
-  Future<void> _add({
-    required String mood,
-    int? sleepQuality,
-    int? energyLevel,
-  }) async {
-    try {
-      await ApiService().addMoodEntry(
-        mood: mood,
-        sleepQuality: sleepQuality,
-        energyLevel: energyLevel,
-      );
-      await _load();
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Add failed: $e')),
-        );
-      }
-    }
-  }
-
   Future<void> _delete(String id) async {
     try {
       await ApiService().deleteMoodEntry(id);

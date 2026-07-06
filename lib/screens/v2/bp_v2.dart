@@ -53,33 +53,6 @@ class _BpV2State extends State<BpV2> {
     }
   }
 
-  Future<void> _add({
-    required int systolic,
-    required int diastolic,
-    int? pulse,
-    String session = 'morning',
-    List<String>? entryContext,
-    bool medicationTaken = false,
-  }) async {
-    try {
-      await ApiService().addBpEntry(
-        systolic: systolic,
-        diastolic: diastolic,
-        pulse: pulse,
-        session: session,
-        context: entryContext,
-        medicationTaken: medicationTaken,
-      );
-      await _load();
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Add failed: $e')),
-        );
-      }
-    }
-  }
-
   Future<void> _delete(String id) async {
     try {
       await ApiService().deleteBpEntry(id);

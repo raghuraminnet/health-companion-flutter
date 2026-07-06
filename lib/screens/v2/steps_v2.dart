@@ -119,9 +119,9 @@ class _StepsV2State extends State<StepsV2> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return Scaffold(
+      return const Scaffold(
         backgroundColor: V2Colors.bg,
-        body: const SafeArea(child: Center(child: CircularProgressIndicator())),
+        body: SafeArea(child: Center(child: CircularProgressIndicator())),
       );
     }
     if (_error != null && _entries.isEmpty) {
@@ -321,7 +321,7 @@ class _SevenDayArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final maxVal = data.isEmpty ? 1.0 : data.reduce((a, b) => a > b ? a : b);
-    final maxY = maxVal == 0 ? 15000.0 : ((maxVal * 1.2).clamp(1000.0, 100000.0) as double);
+    final maxY = maxVal == 0 ? 15000.0 : (maxVal * 1.2).clamp(1000.0, 100000.0);
     final avg = data.isEmpty ? 0.0 : data.reduce((a, b) => a + b) / data.length;
     final spots = <FlSpot>[];
     for (var i = 0; i < data.length; i++) {

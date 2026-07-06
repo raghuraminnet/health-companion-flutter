@@ -131,9 +131,9 @@ class _WaterV2State extends State<WaterV2> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return Scaffold(
+      return const Scaffold(
         backgroundColor: V2Colors.bg,
-        body: const SafeArea(
+        body: SafeArea(
           child: Center(child: CircularProgressIndicator()),
         ),
       );

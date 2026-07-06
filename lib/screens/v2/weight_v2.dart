@@ -53,19 +53,6 @@ class _WeightV2State extends State<WeightV2> {
     }
   }
 
-  Future<void> _add(double weight, {String? notes}) async {
-    try {
-      await ApiService().addWeightEntry(weight: weight, notes: notes);
-      await _load();
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Add failed: $e')),
-        );
-      }
-    }
-  }
-
   Future<void> _delete(String id) async {
     try {
       await ApiService().deleteWeightEntry(id);
@@ -311,9 +298,9 @@ class _SevenDayTrend extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final maxY = spots.isEmpty ? 100.0
-        : ((spots.map((s) => s.y).reduce((a, b) => a > b ? a : b) + 2).clamp(50.0, 300.0) as double);
+        : ((spots.map((s) => s.y).reduce((a, b) => a > b ? a : b) + 2).clamp(50.0, 300.0));
     final minY = spots.isEmpty ? 50.0
-        : ((spots.map((s) => s.y).reduce((a, b) => a < b ? a : b) - 2).clamp(20.0, maxY - 5) as double);
+        : ((spots.map((s) => s.y).reduce((a, b) => a < b ? a : b) - 2).clamp(20.0, maxY - 5));
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 18, 20, 16),
       decoration: BoxDecoration(
